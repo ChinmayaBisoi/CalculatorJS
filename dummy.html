@@ -1,0 +1,254 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>A Simple Calculator</title>
+
+    <style>
+        *{
+            box-sizing: border-box;
+            padding: 0;
+            margin: 0;
+            
+        }
+
+        html{
+            min-height: 100%;
+        }
+
+        body{
+            background: #a595fc linear-gradient(65deg, #9ab1ff 0%, #f2b7fd 100%);
+            
+        }
+
+        
+        .container{
+            min-height: 442px;
+            max-width: 350px;
+            box-shadow: #f5f3f3;
+            border: 2px solid rgb(190, 190, 190);
+            background-color: #ffffff;
+            margin: 40px auto;
+            border-radius: 12px;
+            box-shadow: ;
+            
+        }
+
+        .screen{
+            text-align: right;
+            font-size: 35px;
+            padding: 25px 15px;
+            overflow: hidden;
+            max-height: 328px;
+
+            /* wrap: no-wrap; */
+
+
+        }
+
+        .keyss{
+            display: grid;
+            grid-template-columns: auto auto auto auto;
+            grid-column-gap: 0px;
+            align-content: stretch;
+            
+            
+
+        }
+
+        .btn-equal{
+            grid-column: -2;
+            grid-row: 2/span 4;
+        }
+
+        .keyss>*{
+            padding: 1.65em 1.25em;
+            position: relative;
+            text-align: center;
+            font-size: 16px;
+            background-color: #ffffff;
+            outline: none;
+            border: 0;
+
+        }
+
+        .key-op{
+            background-color: #e6e6e6;
+        }
+
+        .btn-equal{
+            background-color: #333;
+            color: #ffffff;
+            border-radius: 0px 0px 11px 0px;
+        }
+
+        .btn-zero{
+            border-radius: 0px 0px 0px 12px;
+        }
+
+        .keyss>*:hover{
+            background-color: #f5f3f3;
+            cursor: pointer;
+        }
+
+        .key-op:hover{
+            background-color: #dddbdb;
+        }
+
+        .btn-equal:hover{
+            background-color: rgb(27, 27, 27);
+        }
+
+        .project-name{
+            font-size: 20px;
+            margin: 20px 50px;
+            text-align: center;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="project-name">Calci by Chinu</div>
+    
+    <div class="container">
+            
+        
+            <div class="screen">0</div>    
+            <div class="keyss">
+                <button class="num key-op" >+</button>
+                <button class="num key-op" >-</button>
+                <button class="num key-op" >*</button>
+                <button class="num key-op" >/</button>
+                <button class="num">7</button>
+                <button class="num">8</button>
+                <button class="num">9</button>
+                <button class="num">4</button>
+                <button class="num">5</button>
+                <button class="num">6</button>
+                <button class="num">1</button>
+                <button class="num">2</button>
+                <button class="num">3</button>
+                <button class="num btn-zero">0</button>
+                <button class="num period">.</button>
+                <button class="num clearr">AC</button>
+                <button class="num btn-equal" >=</button>
+              </div>
+
+        
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function(event) {
+      // - Code to execute when all DOM content is loaded. 
+  
+
+        const screen = document.querySelector(".screen");
+        const key = document.querySelectorAll(".num");
+        const result = document.querySelector('.btn-equal');
+        const clearr = document.querySelector(".clearr");
+        const period = document.querySelector('.period');
+        let operator=null;
+
+
+        // to print the number on screen
+        for(let i=4; i<key.length - 3; i++){
+            
+            key[i].addEventListener('click',(e)=>{
+                operator = null;
+                if(screen.innerText === '0'){
+                    screen.innerText = e.target.innerText;
+
+                }else{
+                    screen.innerText += e.target.innerText;
+                }
+
+
+            });
+        }
+
+       function whoCameFirst(){
+            let i=0;
+            for(i=screen.innerText.length-1; i>=0; i--){
+                if(screen.innerText[i] === "."){
+                    return -1;
+                }else if((screen.innerText[i] === "+") || (screen.innerText[i] === "*") || (screen.innerText[i] === "-" ) || (screen.innerText[i] === "/")){
+                    return 1;
+                }
+            }
+           
+        }
+
+        //for handlingthe decimal point
+        period.addEventListener('click',(e)=>{
+            
+            let txt1 = screen.innerText[screen.innerText.length-1]; 
+            let len = screen.innerText.length;
+            operator = null;
+            let flag = whoCameFirst();
+            console.log(flag);
+            if( (txt1 !== "+") && (txt1 !== "*") && (txt1 !== "-" ) && (txt1 !== "/") &&  (txt1 !== "." ) && (flag==undefined || flag==1) ){
+                screen.innerText+= e.target.innerText;
+            }
+            
+            // while(len--){
+            //     if( screen.innerText[len]
+
+            //  ){
+            //         console.log(screen.innerText.lastIndexOf("."));
+            //         console.log(screen.innerText.lastIndexOf("*"));
+            //         screen.innerText+= e.target.innerText;
+            //         break;
+            //     }
+            // }
+
+        });
+
+        
+        // for handling operators
+        for(let i=0; i<4; i++){
+            key[i].addEventListener('click',(e)=>{
+                // console.log(e);
+                
+                if(operator === null){
+                    screen.innerText += e.target.innerText;
+                    operator = screen.innerText;
+
+
+                }else{
+                    screen.innerText = screen.innerText.slice(0,screen.innerText.length-1) + e.target.innerText;
+
+                }
+
+                
+
+
+            });
+        }
+
+        
+               
+        result.addEventListener('click',(e)=>{
+            screen.innerText = eval(screen.innerText).toString();
+
+        });
+
+        
+        clearr.addEventListener("click",()=>{
+            screen.textContent = '0';
+        });
+
+
+    
+    });
+
+
+
+
+    </script>
+
+
+</body>
+
+</html>
